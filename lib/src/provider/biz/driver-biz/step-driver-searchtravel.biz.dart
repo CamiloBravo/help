@@ -16,11 +16,9 @@ import '../biz.dart';
 
 class StepDriverSearchTravelBiz {
   ViagemService _viagemService = ViagemService();
-  HomeDriverBloc _homeMotoristaBloc =
-      BlocProvider.getBloc<HomeDriverBloc>();
+  HomeDriverBloc _homeMotoristaBloc = BlocProvider.getBloc<HomeDriverBloc>();
   AuthDriverBloc _authBloc = BlocProvider.getBloc<AuthDriverBloc>();
-  BaseDriverBloc _baseMotoristaBloc =
-      BlocProvider.getBloc<BaseDriverBloc>();
+  BaseDriverBloc _baseMotoristaBloc = BlocProvider.getBloc<BaseDriverBloc>();
   GoogleService _googleService = GoogleService();
   Geolocator _geolocator = Geolocator();
   StreamSubscription<QuerySnapshot> _streamAllAbertaViagem;
@@ -29,7 +27,6 @@ class StepDriverSearchTravelBiz {
   StepDriverStartBiz _stepMotoristaInicioBiz = StepDriverStartBiz();
   bool indicaStatusProcesso = true;
   StreamSubscription<Position> _streamPositionInicial;
-
 
   static StepDriverSearchTravelBiz _instance;
 
@@ -42,7 +39,6 @@ class StepDriverSearchTravelBiz {
 
   /*start monitoramento firebase*/
   Future<void> Start() async {
-
     /*ativa o monitoramento da localizacao atual do motorista*/
     await startMonitoramentoLocalAtual();
 
@@ -54,7 +50,6 @@ class StepDriverSearchTravelBiz {
 
     _streamAllAbertaViagem = stream.listen((data) {
       data.documentChanges.forEach((change) async {
-
         /*cancela busca por corrida pois ja tem uma corrida em  setada */
         _streamAllAbertaViagem?.cancel();
 
@@ -67,70 +62,68 @@ class StepDriverSearchTravelBiz {
     });
   }
 
-
   Future<void> streamMonitoramentoViagemEspecifica(
       Emergencias viagem, Motorista motorista) async {
-
     /*encerra monitoramento da localizacao atual motorista*/
     encerrarFluxosPosicaoLocalMotorista();
 
-      /*adiciona a viagem no fluxo para ser utilizada posteriormente*/
-      _baseMotoristaBloc.viagemEvent.add(viagem);
+    /*adiciona a viagem no fluxo para ser utilizada posteriormente*/
+    _baseMotoristaBloc.viagemEvent.add(viagem);
 
-      /*adiciona localização do motorista com base no usuario*/
-      adicionaLocalizacaoInicialPassageiroMotorista(viagem);
+    /*adiciona localização do motorista com base no usuario*/
+    adicionaLocalizacaoInicialPassageiroMotorista(viagem);
 
-      /*obtem fluxo para monitorar viagem especifica*/
-      var streamViagemEspecifica =
-      await _viagemService.getViagemById(viagem.Id);
+    /*obtem fluxo para monitorar viagem especifica*/
+    var streamViagemEspecifica = await _viagemService.getViagemById(viagem.Id);
 
-      _streamSpecificAbertaViagem = streamViagemEspecifica.listen((data) {
-        data.documentChanges.forEach((changeResult) async {
-          var viagemEspefica = Emergencias.fromSnapshotJson(changeResult.document);
-          print('Stream de buscar viagem Especifica está ativo');
+    _streamSpecificAbertaViagem = streamViagemEspecifica.listen((data) {
+      data.documentChanges.forEach((changeResult) async {
+        var viagemEspefica =
+            Emergencias.fromSnapshotJson(changeResult.document);
+        print('Stream de buscar viagem Especifica está ativo');
 
-          if (viagemEspefica.Status == TravelStatus.DriverPath) {
-            /*mata  o stream evitar encalar os processos*/
-            //streamSpecificAbertaViagem?.cancel();
+        if (viagemEspefica.Status == TravelStatus.DriverPath) {
+          /*mata  o stream evitar encalar os processos*/
+          //streamSpecificAbertaViagem?.cancel();
 
-            /*inicia  o processo de viagem atualizando a variavel viagem */
-            if (motorista.Id == viagemEspefica.MotoristaEntity.Id) {
-              if (!indicaStatusProcesso) return;
+          /*inicia  o processo de viagem atualizando a variavel viagem */
+          if (motorista.Id == viagemEspefica.MotoristaEntity.Id) {
+            if (!indicaStatusProcesso) return;
 
-              /*atualiza firebase  com a localização do motorista e sua respectiva localizacao*/
-              await visualizaLocalizacaoPassageiroMotorista(
-                  viagemEspefica, TravelStatus.DriverPath);
-              /*atualiza a tela*/
-              _homeMotoristaBloc.stepMotoristaEvent
-                  .add(StepDriverHome.TravelAccept);
+            /*atualiza firebase  com a localização do motorista e sua respectiva localizacao*/
+            await visualizaLocalizacaoPassageiroMotorista(
+                viagemEspefica, TravelStatus.DriverPath);
+            /*atualiza a tela*/
+            _homeMotoristaBloc.stepMotoristaEvent
+                .add(StepDriverHome.TravelAccept);
 
-              /*atualiza o fluxo da viagem com informacoes novas*/
-              _baseMotoristaBloc.viagemEvent.add(viagemEspefica);
+            /*atualiza o fluxo da viagem com informacoes novas*/
+            _baseMotoristaBloc.viagemEvent.add(viagemEspefica);
 
-              indicaStatusProcesso = false;
-            } else {
-              /*manda notificacao que a viagem foi aceita por outro motorista e inicia o processo de busca de viagens novamente */
-              encerraFluxo();
-              _homeMotoristaBloc.stepMotoristaEvent
-                  .add(StepDriverHome.LookingTravel);
-              Start();
-            }
-            /*fecha o modal pois a viagem foi iniciada */
-          } else if (viagemEspefica.Status == TravelStatus.Canceled) {
-            /*mata  o stream evitar encalar os processos*/
+            indicaStatusProcesso = false;
+          } else {
+            /*manda notificacao que a viagem foi aceita por outro motorista e inicia o processo de busca de viagens novamente */
             encerraFluxo();
             _homeMotoristaBloc.stepMotoristaEvent
                 .add(StepDriverHome.LookingTravel);
             Start();
           }
-        });
+          /*fecha o modal pois a viagem foi iniciada */
+        } else if (viagemEspefica.Status == TravelStatus.Canceled) {
+          /*mata  o stream evitar encalar os processos*/
+          encerraFluxo();
+          _homeMotoristaBloc.stepMotoristaEvent
+              .add(StepDriverHome.LookingTravel);
+          Start();
+        }
       });
+    });
   }
 
   /* fix resolver problema de quando  estava procurando a viagem o monitoramento parava*/
   Future<void> startMonitoramentoLocalAtual() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     /*obtem o nome do endereco com base lat e log*/
     var endereco = await _googleService.getAddresByCoordinates(
@@ -139,14 +132,13 @@ class StepDriverSearchTravelBiz {
     final ProviderMapa providerMapa = ProviderMapa(
         EnderecoAtualMotorista: endereco,
         LatLngPosicaoMotoristaPoint:
-        LatLng(position.latitude, position.longitude));
+            LatLng(position.latitude, position.longitude));
 
     await _adicionarCarrinhoMapa(providerMapa, 120);
     Future.delayed(const Duration(milliseconds: 500), () {
       startMonitoramentoMotoristaMapa();
     });
   }
-
 
   void encerrarFluxosStream() {
     if (_streamPosition != null) _streamPosition?.cancel();
@@ -167,8 +159,8 @@ class StepDriverSearchTravelBiz {
   /*adiciona ponto inicial posicao motorista piloto*/
   Future<void> adicionaLocalizacaoInicialPassageiroMotorista(
       Emergencias viagem) async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     /*obtem o nome do endereco com base lat e log*/
     var endereco = await _googleService.getAddresByCoordinates(
@@ -185,8 +177,7 @@ class StepDriverSearchTravelBiz {
 
     await rotaMotoristaAteUsuario(providerMapa);
     /*inicia fluxo pedindo que  mostre o modal de aceita*/
-    _homeMotoristaBloc.stepMotoristaEvent
-        .add(StepDriverHome.TripFound);
+    _homeMotoristaBloc.stepMotoristaEvent.add(StepDriverHome.TripFound);
     /*adiciona monitoramento */
     Future.delayed(const Duration(milliseconds: 500), () async {
       await visualizaLocalizacaoPassageiroMotorista(
@@ -203,9 +194,8 @@ class StepDriverSearchTravelBiz {
 
     if (_streamPosition != null) _streamPosition.cancel();
 
-    _streamPosition = _geolocator
-        .getPositionStream(locationOptions)
-        .listen((Position position) async {
+    _streamPosition =
+        Geolocator.getPositionStream().listen((Position position) async {
       if (position != null && semaforo) {
         semaforo = false;
         Future.delayed(const Duration(milliseconds: 1800), () async {
@@ -318,7 +308,7 @@ class StepDriverSearchTravelBiz {
       provider.Markers = Set<Marker>();
 
       final Uint8List markerIcon =
-      await getBytesFromAsset('assets/images/car/taximarker.png', iconSize);
+          await getBytesFromAsset('assets/images/car/taximarker.png', iconSize);
 
       //_geolocator.bearingBetween(startLatitude, startLongitude, endLatitude, endLongitude)
 
@@ -346,19 +336,17 @@ class StepDriverSearchTravelBiz {
       if (_streamPositionInicial != null) _streamPositionInicial?.cancel();
 
       var locationOptions =
-      LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
+          LocationOptions(accuracy: LocationAccuracy.high, distanceFilter: 10);
 
       ProviderMapa providerMapa =
-      await _baseMotoristaBloc.providermapFlux.first;
+          await _baseMotoristaBloc.providermapFlux.first;
       bool semaforo = true;
 
-      _streamPositionInicial = _geolocator
-          .getPositionStream(locationOptions)
-          .listen((Position position) {
+      _streamPositionInicial =
+          Geolocator.getPositionStream().listen((Position position) {
         if (position != null && semaforo) {
           semaforo = false;
           Future.delayed(const Duration(milliseconds: 100), () async {
-
             /*obtem o nome do endereco com base lat e log*/
             var endereco = await _googleService.getAddresByCoordinates(
                 position.latitude.toString(), position.longitude.toString());
@@ -385,6 +373,4 @@ class StepDriverSearchTravelBiz {
   void encerrarFluxosPosicaoLocalMotorista() {
     if (_streamPositionInicial != null) _streamPositionInicial?.cancel();
   }
-
-
 }

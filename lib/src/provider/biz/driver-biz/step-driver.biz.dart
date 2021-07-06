@@ -21,14 +21,13 @@ class StepDriverStartBiz {
   StepDriverStartBiz._internalConstructor();
 
   GoogleService _googleService = GoogleService();
-  BaseDriverBloc _baseMotoristaBloc =
-      BlocProvider.getBloc<BaseDriverBloc>();
+  BaseDriverBloc _baseMotoristaBloc = BlocProvider.getBloc<BaseDriverBloc>();
   StreamSubscription<Position> _streamPositionInicial;
 
   /*inicio motorista*/
   Future start() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     /*obtem o nome do endereco com base lat e log*/
     var endereco = await _googleService.getAddresByCoordinates(
@@ -63,13 +62,11 @@ class StepDriverStartBiz {
           await _baseMotoristaBloc.providermapFlux.first;
       bool semaforo = true;
 
-      _streamPositionInicial = _geolocator
-          .getPositionStream(locationOptions)
-          .listen((Position position) {
+      _streamPositionInicial =
+          Geolocator.getPositionStream().listen((Position position) {
         if (position != null && semaforo) {
           semaforo = false;
           Future.delayed(const Duration(milliseconds: 100), () async {
-
             /*obtem o nome do endereco com base lat e log*/
             var endereco = await _googleService.getAddresByCoordinates(
                 position.latitude.toString(), position.longitude.toString());

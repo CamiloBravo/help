@@ -22,12 +22,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   HomeDriverBloc _homeBloc;
   BaseDriverBloc _baseBloc;
   GlobalKey<ScaffoldState> _scaffoldKey;
   Completer<GoogleMapController> _controller;
-
 
   @override
   void initState() {
@@ -59,10 +59,11 @@ class _HomePageState extends State<HomePage> {
         key: _scaffoldKey,
         body: StreamBuilder(
             stream: _homeBloc.stepMotoristaFlux,
-            builder: (BuildContext context,
-                AsyncSnapshot<StepDriverHome> snapshot) {
+            builder:
+                (BuildContext context, AsyncSnapshot<StepDriverHome> snapshot) {
               if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator(
+                return Center(
+                    child: CircularProgressIndicator(
                   valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
                 ));
               }
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
         'your channel id', 'your channel name', 'your channel description',
         playSound: false, importance: Importance.Max, priority: Priority.High);
     var iOSPlatformChannelSpecifics =
-    new IOSNotificationDetails(presentSound: false);
+        new IOSNotificationDetails(presentSound: false);
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
@@ -112,9 +113,11 @@ class _HomePageState extends State<HomePage> {
         break;
       case StepDriverHome.LookingTravel:
         widgetsHome.add(buttonBar(widget.changeDrawer, context));
-        widgetsHome.add(InputSearchRunWidget()); //Muestra el contador en pantalla
+        widgetsHome
+            .add(InputSearchRunWidget()); //Muestra el contador en pantalla
         widgetsHome.add(RadarWidget()); //Muestra el efecto del radar
-        widgetsHome.add(SwitchStatusSearchRunWidget(true, _scaffoldKey)); //Añade el boton de buscar
+        widgetsHome.add(SwitchStatusSearchRunWidget(
+            true, _scaffoldKey)); //Añade el boton de buscar
         return widgetsHome;
         break;
       case StepDriverHome.TripFound:
@@ -174,7 +177,8 @@ class _HomePageState extends State<HomePage> {
         stream: _baseBloc.providermapFlux,
         builder: (BuildContext context, AsyncSnapshot<ProviderMapa> snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator(
+            return Center(
+                child: CircularProgressIndicator(
               valueColor: new AlwaysStoppedAnimation<Color>(Colors.amber),
             ));
           }

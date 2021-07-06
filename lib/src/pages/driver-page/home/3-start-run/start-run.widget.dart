@@ -40,53 +40,47 @@ class StartRunWidget extends StatelessWidget {
               width: 1,
             );
 
-          var height = MediaQuery
-              .of(context)
-              .size
-              .height * 0.37;
-          var width = MediaQuery
-              .of(context)
-              .size
-              .width;
+          var height = MediaQuery.of(context).size.height * 0.37;
+          var width = MediaQuery.of(context).size.width;
           print(viagem.PassageiroEntity.Foto.Url);
           return Positioned.fill(
               child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  color: Colors.transparent,
-                  child: new Container(
-                      height: height,
-                      width: width,
-                      decoration: new BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: new BorderRadius.only(
-                              topLeft: const Radius.circular(40.0),
-                              topRight: const Radius.circular(40.0))),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "El usuario ya esta al tanto del servicio",
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Container(
-                            height: 1,
-                            color: Colors.grey.withOpacity(0.4),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              children: <Widget>[
-                                /*Expanded(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Colors.transparent,
+              child: new Container(
+                  height: height,
+                  width: width,
+                  decoration: new BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: new BorderRadius.only(
+                          topLeft: const Radius.circular(40.0),
+                          topRight: const Radius.circular(40.0))),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "El usuario ya esta al tanto del servicio",
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        height: 1,
+                        color: Colors.grey.withOpacity(0.4),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Row(
+                          children: <Widget>[
+                            /*Expanded(
                                   child: Column(
                                     children: <Widget>[
                                       CircleAvatar(
@@ -123,142 +117,139 @@ class StartRunWidget extends StatelessWidget {
                                     ],
                                   ),
                                 ),*/
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                          radius: 25.0,
-                                          backgroundColor:
+                            Expanded(
+                              child: Column(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                      radius: 25.0,
+                                      backgroundColor:
                                           Colors.grey.withOpacity(0.1),
-                                          child: Stack(
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: <Widget>[
+                                          Stack(
                                             alignment: Alignment.center,
                                             children: <Widget>[
-                                              Stack(
-                                                alignment: Alignment.center,
-                                                children: <Widget>[
-                                                  Container(
-                                                    height: 60,
-                                                    width: 50,
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: Colors.white,
-                                                            width: 2),
-                                                        borderRadius:
+                                              Container(
+                                                height: 60,
+                                                width: 50,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.white,
+                                                        width: 2),
+                                                    borderRadius:
                                                         BorderRadius.circular(
                                                             70),
-                                                        image: DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image: viagem
+                                                    image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: viagem
                                                                 .PassageiroEntity
                                                                 .Foto
                                                                 .IndicaOnLine
-                                                                ? NetworkImage(
-                                                                viagem
-                                                                    .PassageiroEntity
-                                                                    .Foto
-                                                                    .Url)
-                                                                : AssetImage(
-                                                                viagem
-                                                                    .PassageiroEntity
-                                                                    .Foto
-                                                                    .Url))),
-                                                  )
-                                                ],
+                                                            ? NetworkImage(viagem
+                                                                .PassageiroEntity
+                                                                .Foto
+                                                                .Url)
+                                                            : AssetImage(viagem
+                                                                .PassageiroEntity
+                                                                .Foto
+                                                                .Url))),
                                               )
                                             ],
-                                          )),
-                                      Text(
-                                        viagem.PassageiroEntity.Nome,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(viagem.PassageiroEntity.Celular,
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
+                                          )
+                                        ],
+                                      )),
+                                  Text(
+                                    viagem.PassageiroEntity.Nome,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                          radius: 25.0,
-                                          backgroundColor:
+                                  Text(viagem.PassageiroEntity.Celular,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                      radius: 25.0,
+                                      backgroundColor:
                                           Colors.grey.withOpacity(0.1),
-                                          child: Stack(
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: <Widget>[
+                                          Stack(
                                             alignment: Alignment.center,
                                             children: <Widget>[
-                                              Stack(
-                                                alignment: Alignment.center,
-                                                children: <Widget>[
-                                                  Icon(
-                                                    Feather.getIconData(
-                                                        'map-pin'),
-                                                    size: 24,
-                                                    color: Colors.black,
-                                                  ),
-                                                ],
-                                              )
+                                              Icon(
+                                                Feather.getIconData('map-pin'),
+                                                size: 24,
+                                                color: Colors.black,
+                                              ),
                                             ],
-                                          )),
-                                      Text(
-                                        viagem.Distancia,
-                                        style:
+                                          )
+                                        ],
+                                      )),
+                                  Text(
+                                    viagem.Distancia,
+                                    style:
                                         TextStyle(fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                          width: width * 0.9,
+                          margin: EdgeInsets.only(top: 10.0),
+                          decoration: new BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: Colors.black,
+                                  offset: Offset(0.0, 0.3),
+                                  blurRadius: 1.0,
                                 ),
                               ],
-                            ),
-                          ),
-                          Container(
-                              width: width * 0.9,
-                              margin: EdgeInsets.only(top: 10.0),
-                              decoration: new BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                                  boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                      color: Colors.black,
-                                      offset: Offset(0.0, 0.3),
-                                      blurRadius: 1.0,
-                                    ),
-                                  ],
-                                  gradient: ColorsStyle.getColorBotton()),
-                              child: MaterialButton(
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Color(0xFFFFFFFF),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 35.0),
-                                    child: Text(
-                                      "Llegué a la emergencia",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    _iniciarViagem(context);
-                                  }))
-                        ],
-                      )),
-                ),
-              )
-            /* */
-          );
+                              gradient: ColorsStyle.getColorBotton()),
+                          child: MaterialButton(
+                              highlightColor: Colors.transparent,
+                              splashColor: Color(0xFFFFFFFF),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 35.0),
+                                child: Text(
+                                  "Llegué a la emergencia",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16.0),
+                                ),
+                              ),
+                              onPressed: () {
+                                _iniciarViagem(context);
+                              }))
+                    ],
+                  )),
+            ),
+          )
+              /* */
+              );
         });
   }
 
   Future<void> _iniciarViagem(BuildContext context) async {
     Emergencias viagem = await _authBase.viagemFlux.first;
 
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     /*valida a aproximacao, evitar que a corrida seja iciada com distancia maior que 1km*/
     DistanciaTempo distanciaTempo = await _googleService.getdistancia(

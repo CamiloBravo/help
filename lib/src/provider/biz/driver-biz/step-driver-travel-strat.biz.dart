@@ -14,8 +14,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../provider.dart';
 
 class StepDriverViagemIniciada {
-  BaseDriverBloc _baseMotoristaBloc =
-      BlocProvider.getBloc<BaseDriverBloc>();
+  BaseDriverBloc _baseMotoristaBloc = BlocProvider.getBloc<BaseDriverBloc>();
   ViagemService _viagemService = ViagemService();
   StreamSubscription<QuerySnapshot> _streamSpecificaViagem;
   StreamSubscription<Position> _streamPosition;
@@ -45,7 +44,8 @@ class StepDriverViagemIniciada {
 
     _streamSpecificaViagem = streamViagemEspecifica.listen((data) {
       data.documentChanges.forEach((changeResult) async {
-        var viagemEspefica = Emergencias.fromSnapshotJson(changeResult.document);
+        var viagemEspefica =
+            Emergencias.fromSnapshotJson(changeResult.document);
         print('Stream de viagem iniciada Especifica está ativo');
 
         if (viagemEspefica.Status == TravelStatus.Finished) {
@@ -65,9 +65,8 @@ class StepDriverViagemIniciada {
 
     if (_streamPosition != null) _streamPosition.cancel();
 
-    _streamPosition = _geolocator
-        .getPositionStream(locationOptions)
-        .listen((Position position) async {
+    _streamPosition =
+        Geolocator.getPositionStream().listen((Position position) async {
       if (position != null && semaforo) {
         semaforo = false;
         /*a casa dois segundos salva a localizacao ataul*/
@@ -92,8 +91,8 @@ class StepDriverViagemIniciada {
               EnderecoOrigem: endereco,
               EnderecoAtualMotorista: endereco,
               EnderecoDestino: viagem.DestinoEndereco,
-              LatLngDestinoPoint: LatLng(
-                  viagem.DestinoLatitude, viagem.DestinoLongitude),
+              LatLngDestinoPoint:
+                  LatLng(viagem.DestinoLatitude, viagem.DestinoLongitude),
               LatLngPosicaoMotoristaPoint:
                   LatLng(position.latitude, position.longitude),
               LatLngOrigemPoint: LatLng(position.latitude, position.longitude),
@@ -137,10 +136,10 @@ class StepDriverViagemIniciada {
     provider.Markers = Set<Marker>();
 
     final Uint8List markerIcon =
-    await getBytesFromAsset('assets/images/car/taximarker.png', iconSize);
+        await getBytesFromAsset('assets/images/car/taximarker.png', iconSize);
 
     /*rotacao no carro no mapa*/
-    var rotacao = await _geolocator.bearingBetween(
+    var rotacao = await Geolocator.bearingBetween(
         provider.LatLngOrigemPoint.latitude,
         provider.LatLngOrigemPoint.longitude,
         provider.LatLngDestinoPoint.latitude,

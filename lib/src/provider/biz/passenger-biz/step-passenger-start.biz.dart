@@ -24,8 +24,8 @@ class StepPassengerStartBiz {
 
   /*inicio passageiro*/
   Future start() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
     /*obtem o nome do endereco com base lat e log*/
     var endereco = await _googleService.getAddresByCoordinates(
@@ -59,9 +59,8 @@ class StepPassengerStartBiz {
           await _basePassageiroBloc.providermapFlux.first;
       bool semaforo = true;
 
-      _streamPositionInicial = _geolocator
-          .getPositionStream(locationOptions)
-          .listen((Position position) {
+      _streamPositionInicial =
+          Geolocator.getPositionStream().listen((Position position) {
         if (position != null && semaforo) {
           semaforo = false;
           Future.delayed(const Duration(milliseconds: 100), () async {
